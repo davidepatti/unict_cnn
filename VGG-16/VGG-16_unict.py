@@ -84,11 +84,14 @@ if __name__ == "__main__":
     from keras.preprocessing.image import ImageDataGenerator
     from keras import metrics
 
+
+    print('batch_size = '+batch_size)
+    print('steps = '+steps)
+
     val_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
     validation_generator = val_datagen.flow_from_directory('./imagenet-data/validation',
 		target_size=(224, 224), 
 		batch_size=1,
-		#batch_size=10,
 		class_mode='categorical',
 		shuffle=False)
 
@@ -97,6 +100,8 @@ if __name__ == "__main__":
     model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['acc', metrics.top_k_categorical_accuracy])
 
     #results = model.evaluate_generator(validation_generator, steps=5000, workers=1, max_queue_size=1)
+
+    #https://keras.rstudio.com/reference/evaluate_generator.html
     results = model.evaluate_generator(validation_generator, steps=5, workers=1, max_queue_size=1)
     print(results)
 #########################################
