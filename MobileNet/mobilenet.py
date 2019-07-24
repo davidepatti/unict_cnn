@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
     results = model.evaluate_generator(validation_generator, steps=5, workers=1, max_queue_size=1)
 
-    print('--> Results:')
+    print('--> Results for '+sys.argv[1])
     print(model.metrics_names)
     print(results)
 
