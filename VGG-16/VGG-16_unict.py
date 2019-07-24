@@ -7,6 +7,9 @@ from keras.models import Sequential
 from keras.layers.core import Flatten, Dense, Dropout
 from keras.layers.convolutional import Conv2D, MaxPooling2D, ZeroPadding2D
 from keras.optimizers import SGD
+from keras.applications.vgg16 import decode_predictions
+from keras.preprocessing import image
+from keras.applications.vgg16 import preprocess_input
 import cv2, numpy as np
 
 def VGG_16(weights_path=None):
@@ -60,33 +63,30 @@ def VGG_16(weights_path=None):
     return model
 
 if __name__ == "__main__":
-    from keras.applications.vgg16 import decode_predictions
 
-    im = cv2.resize(cv2.imread(sys.argv[2]), (224, 224)).astype(np.float32)
-    im[:,:,0] -= 103.939
-    im[:,:,1] -= 116.779
-    im[:,:,2] -= 123.68
-    im = im.transpose((1,0,2))
-    im = np.expand_dims(im, axis=0)
-
-    print('** Executing model')
+    print('--> Testing inference...')
 
     # Test pretrained model
     model = VGG_16(sys.argv[1])
     sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
-    model.compile(optimizer=sgd, loss='categorical_crossentropy')
-    out = model.predict(im)
-    predictions = decode_predictions(out)
-    print(predictions)
+
+    img_path = sys.argv[2]
+    img = image.load_img(img_path, target_size=(224, 224))
+    x = image.img_to_array(img)
+    x = np.expand_dims(x, axis=0)
+    x = preprocess_input(x)
+    print('Input image shape:', x.shape)
+
+    preds = model.predict(x)
+    print(decode_predictions(preds))
 
 #########################################
-    from keras.applications.vgg16 import preprocess_input
+    print('--> Starting evalutation...')
     from keras.preprocessing.image import ImageDataGenerator
     from keras import metrics
-
-
-    print('batch_size = '+batch_size)
-    print('steps = '+steps)
+    
+    def in_top_k(y_true, y_pred):
+        return metrics.top_k_categorical_accuracy(y_true,y_pred,k=5)
 
     val_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
     validation_generator = val_datagen.flow_from_directory('./imagenet-data/validation',
@@ -95,13 +95,13 @@ if __name__ == "__main__":
 		class_mode='categorical',
 		shuffle=False)
 
-#model = VGG16(weights='imagenet', include_top=True)
     model.trainable=False
-    model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['acc', metrics.top_k_categorical_accuracy])
+    model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy', in_top_k])
 
-    #results = model.evaluate_generator(validation_generator, steps=5000, workers=1, max_queue_size=1)
-
-    #https://keras.rstudio.com/reference/evaluate_generator.html
     results = model.evaluate_generator(validation_generator, steps=5, workers=1, max_queue_size=1)
+
+    print('--> Results:')
+    print(model.metrics_names)
     print(results)
+
 #########################################
