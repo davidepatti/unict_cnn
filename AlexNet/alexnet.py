@@ -70,7 +70,7 @@ model.add(Flatten())
 model.add(Dense(4096, input_shape=(224*224*3,)))
 model.add(Activation('relu'))
 # Add Dropout to prevent overfitting
-model.add(Dropout(0.4))
+model.add(Dropout(0.5))
 # Batch Normalisation
 model.add(BatchNormalization())
 
@@ -78,17 +78,17 @@ model.add(BatchNormalization())
 model.add(Dense(4096))
 model.add(Activation('relu'))
 # Add Dropout
-model.add(Dropout(0.4))
+model.add(Dropout(0.5))
 # Batch Normalisation
 model.add(BatchNormalization())
 
-# 3rd Dense Layer
-model.add(Dense(1000))
-model.add(Activation('relu'))
-# Add Dropout
-model.add(Dropout(0.4))
-# Batch Normalisation
-model.add(BatchNormalization())
+## 3rd Dense Layer
+#model.add(Dense(1000))
+#model.add(Activation('relu'))
+## Add Dropout
+#model.add(Dropout(0.4))
+## Batch Normalisation
+#model.add(BatchNormalization())
 
 # Output Layer
 model.add(Dense(17))
