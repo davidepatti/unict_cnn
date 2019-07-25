@@ -16,9 +16,14 @@ weights_path = sys.argv[1]
 #model = MobileNet(input_shape=None, alpha=1.0, depth_multiplier=1, dropout=1e-3, include_top=True, weights='imagenet', input_tensor=None, pooling=None, classes=1000)
 model = MobileNet(input_shape=None, alpha=1.0, depth_multiplier=1, dropout=1e-3, include_top=True, weights=weights_path, input_tensor=None, pooling=None, classes=1000)
 
+
+#model.summary();
+
 if __name__ == "__main__":
 
-## test
+    if sys.argv[2] == 'summary':
+        model.summary()
+        exit(0)
 
     img_path = sys.argv[2]
     img = image.load_img(img_path, target_size=(224, 224))
@@ -29,8 +34,6 @@ if __name__ == "__main__":
 
     preds = model.predict(x)
     print(decode_predictions(preds))
-    #print(np.argmax(preds))
-    #print('Predicted:', decode_predictions(preds, 1))
 
 #########################################
     print('--> Starting evalutation...')
