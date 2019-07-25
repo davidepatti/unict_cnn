@@ -1,4 +1,5 @@
 import sys
+
 if len(sys.argv) < 3:
     print('Usage: '+sys.argv[0]+' <h5file> <input>')
     exit(0)
@@ -68,6 +69,10 @@ if __name__ == "__main__":
 
     # Test pretrained model
     model = VGG_16(sys.argv[1])
+    if sys.argv[2] == 'summary':
+        model.summary()
+        exit(0)
+
     sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
 
     img_path = sys.argv[2]
