@@ -1,9 +1,14 @@
-# (1) Importing dependency
+import sys
+if len(sys.argv) < 2:
+    print('Need to pass h5 file')
+    exit(0)
+
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Dropout, Flatten, Conv2D, MaxPooling2D
 from keras.layers.normalization import BatchNormalization
 from sklearn.model_selection import train_test_split
+from keras import metrics
 import numpy as np
 np.random.seed(1000)
 
@@ -94,23 +99,21 @@ model.add(BatchNormalization())
 model.add(Dense(17))
 model.add(Activation('softmax'))
 
-model.summary()
+if sys.argv[1]=='summary':
+    model.summary()
+    exit(0)
+
+def in_top_k(y_true, y_pred):
+    return metrics.top_k_categorical_accuracy(y_true,y_pred,k=5)  
 
 # (4) Compile 
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy',in_top_k])
 
-# (5) Train
-#model.fit(x, y, batch_size=64, epochs=100, verbose=1,  validation_split=0.2, shuffle=True)
-
-#model.save_weights('alexnet.h5')
-model.load_weights('alexnet.h5')
-
+model.load_weights(sys.argv[1])
 
 score = model.evaluate(x_validation, y_validation)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
-
-
-
+print('Test accuracy_top:', score[2])
 
 
