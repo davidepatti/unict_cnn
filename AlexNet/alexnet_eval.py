@@ -21,7 +21,7 @@ x, y = oxflower17.load_data(one_hot=True)
 # (1) Create Training (80%), test (20%) and validation (20%) dataset
 #     Datasets (x and y) are loaded as numpy object from the previous step
 x_train, x_test_pre, y_train, y_test_pre = train_test_split(x, y, test_size=0.20, random_state=42)
-x_test, x_validation, y_test, y_validation = train_test_split(x_test_pre, y_test_pre, test_size=0.1)
+x_test, x_validation, y_test, y_validation = train_test_split(x_test_pre, y_test_pre, test_size=0.5)
 #
 # Check Shapes
 print('Shape: x_train={}, y_train={}'.format(x_train.shape, y_train.shape))
