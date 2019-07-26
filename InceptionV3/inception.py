@@ -2,22 +2,27 @@ import sys
 if len(sys.argv) < 3:
     print('Usage: '+sys.argv[0]+' <h5file> <input>')
     exit(0)
-from keras.applications.mobilenet import MobileNet
+from keras.applications.inception_v3 import InceptionV3
 from keras.preprocessing import image
-from keras.applications.mobilenet import preprocess_input
-from keras.applications.mobilenet import decode_predictions
+from keras.applications.inception_v3 import preprocess_input
+from keras.applications.inception_v3 import decode_predictions
 from keras.models import Model
 from keras.optimizers import SGD
 import numpy as np
 import cv2
+from keras.layers import Input
 
 weights_path = sys.argv[1]
 
-#model = MobileNet(input_shape=None, alpha=1.0, depth_multiplier=1, dropout=1e-3, include_top=True, weights='imagenet', input_tensor=None, pooling=None, classes=1000)
-model = MobileNet(input_shape=None, alpha=1.0, depth_multiplier=1, dropout=1e-3, include_top=True, weights=weights_path, input_tensor=None, pooling=None, classes=1000)
+#model = MobileNet(input_shape=None, alpha=1.0, depth_multiplier=1, dropout=1e-3, include_top=True, weights=weights_path, input_tensor=None, pooling=None, classes=1000)
 
+model = InceptionV3(include_top=True, weights='imagenet', input_tensor=None, input_shape=None, pooling=None, classes=1000)
+#model = InceptionV3(include_top=True, weights='imagenet', input_tensor=None, input_shape=(299,299,3), pooling=None, classes=1000)
 
-#model.summary();
+#Alternative custom input shape
+#input_tensor = Input(shape=(224, 224, 3))
+#model = InceptionV3(input_tensor=input_tensor, weights='imagenet', include_top=True)
+
 
 if __name__ == "__main__":
 
@@ -26,7 +31,8 @@ if __name__ == "__main__":
         exit(0)
 
     img_path = sys.argv[2]
-    img = image.load_img(img_path, target_size=(224, 224))
+    img = image.load_img(img_path, target_size=(299, 299))
+    #img = image.load_img(img_path, target_size=(224, 224))
     x = image.img_to_array(img)
     x = np.expand_dims(x, axis=0)
     x = preprocess_input(x)
@@ -45,7 +51,8 @@ if __name__ == "__main__":
 
     val_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
     validation_generator = val_datagen.flow_from_directory('./imagenet-data/validation',
-		target_size=(224, 224), 
+		#target_size=(224, 224), 
+		target_size=(299, 299), 
 		batch_size=10,
 		class_mode='categorical',
 		shuffle=False)

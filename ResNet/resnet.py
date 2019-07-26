@@ -2,10 +2,10 @@ import sys
 if len(sys.argv) < 3:
     print('Usage: '+sys.argv[0]+' <h5file> <input>')
     exit(0)
-from keras.applications.mobilenet import MobileNet
+from keras.applications.resnet50 import ResNet50
 from keras.preprocessing import image
-from keras.applications.mobilenet import preprocess_input
-from keras.applications.mobilenet import decode_predictions
+from keras.applications.resnet50 import preprocess_input
+from keras.applications.resnet50 import decode_predictions
 from keras.models import Model
 from keras.optimizers import SGD
 import numpy as np
@@ -13,8 +13,9 @@ import cv2
 
 weights_path = sys.argv[1]
 
-#model = MobileNet(input_shape=None, alpha=1.0, depth_multiplier=1, dropout=1e-3, include_top=True, weights='imagenet', input_tensor=None, pooling=None, classes=1000)
-model = MobileNet(input_shape=None, alpha=1.0, depth_multiplier=1, dropout=1e-3, include_top=True, weights=weights_path, input_tensor=None, pooling=None, classes=1000)
+#model = MobileNet(input_shape=None, alpha=1.0, depth_multiplier=1, dropout=1e-3, include_top=True, weights=weights_path, input_tensor=None, pooling=None, classes=1000)
+
+model = ResNet50(include_top=True, weights='imagenet', input_tensor=None, input_shape=None, pooling=None, classes=1000)
 
 
 #model.summary();
