@@ -1,6 +1,6 @@
 import sys
-if len(sys.argv) < 2:
-    print('Need to pass h5 file')
+if len(sys.argv) < 3:
+    print('Need to pass h5 file and seed')
     exit(0)
 
 import keras
@@ -10,7 +10,7 @@ from keras.layers.normalization import BatchNormalization
 from sklearn.model_selection import train_test_split
 from keras import metrics
 import numpy as np
-np.random.seed(1000)
+np.random.seed(int(sys.argv[2]))
 
 # (2) Get Data
 import tflearn.datasets.oxflower17 as oxflower17
@@ -112,8 +112,10 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 model.load_weights(sys.argv[1])
 
 score = model.evaluate(x_validation, y_validation)
-print('Test loss:', score[0])
-print('Test accuracy:', score[1])
-print('Test accuracy_top:', score[2])
+print('h5: ',sys.argv[1])
+print('Seed: ',sys.argv[2])
+print('Test_loss: ', score[0])
+print('Test_accuracy: ', score[1])
+print('Test_accuracy_top: ', score[2])
 
 
