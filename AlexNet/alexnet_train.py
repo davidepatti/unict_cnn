@@ -111,7 +111,7 @@ model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accur
 
 # (5) Train
 #model.fit(x, y, batch_size=64, epochs=200, verbose=1,  validation_split=0.2, shuffle=True)
-model.fit(x, y, batch_size=64, epochs=100, verbose=1,  validation_split=0.5, shuffle=True)
+model.fit(x, y, batch_size=40, epochs=100, verbose=1,  validation_split=0.5, shuffle=True)
 
 model.save_weights('alexnet_100.h5')
 model.load_weights('alexnet_100.h5')
