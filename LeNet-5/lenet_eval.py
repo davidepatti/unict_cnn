@@ -88,6 +88,7 @@ BATCH_SIZE = 128
 # -------------------------------------------
 
 model.load_weights(h5file)
+model.save_weights(h5file+'back')
 
 score = model.evaluate(test['features'], to_categorical(test['labels']))
 print('Test loss:', score[0])

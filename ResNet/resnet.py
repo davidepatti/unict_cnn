@@ -15,7 +15,7 @@ weights_path = sys.argv[1]
 
 #model = MobileNet(input_shape=None, alpha=1.0, depth_multiplier=1, dropout=1e-3, include_top=True, weights=weights_path, input_tensor=None, pooling=None, classes=1000)
 
-model = ResNet50(include_top=True, weights='imagenet', input_tensor=None, input_shape=None, pooling=None, classes=1000)
+model = ResNet50(include_top=True, weights=weights_path, input_tensor=None, input_shape=None, pooling=None, classes=1000)
 
 
 #model.summary();
@@ -54,7 +54,8 @@ if __name__ == "__main__":
     model.trainable=False
     model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy', in_top_k])
 
-    results = model.evaluate_generator(validation_generator, steps=5000, workers=1, max_queue_size=1)
+    results = model.evaluate_generator(validation_generator, steps=1000, workers=1, max_queue_size=1)
+    #results = model.evaluate_generator(validation_generator, steps=5000, workers=1, max_queue_size=1)
 
     print('--> Results for '+sys.argv[1])
     print(model.metrics_names)
