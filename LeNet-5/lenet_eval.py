@@ -16,6 +16,7 @@ from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator
 from keras.utils.np_utils import to_categorical
 from keras.callbacks import TensorBoard
+from keras import metrics
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -80,8 +81,11 @@ model.add(layers.Dense(units=84, activation='relu'))
 model.add(layers.Dense(units=10, activation = 'softmax'))
 model.summary()
 
+def in_top_k(y_true, y_pred):
+    return metrics.top_k_categorical_accuracy(y_true,y_pred,k=5)
+
 # ------------------------------------------
-model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(), metrics=['accuracy'])
+model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(), metrics=['accuracy',in_top_k])
 EPOCHS = 10
 BATCH_SIZE = 128
 
@@ -93,3 +97,4 @@ model.save_weights(h5file+'back')
 score = model.evaluate(test['features'], to_categorical(test['labels']))
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
+print('Test Top5 accuracy:', score[2])
