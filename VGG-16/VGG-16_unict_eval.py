@@ -96,14 +96,14 @@ if __name__ == "__main__":
     val_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
     validation_generator = val_datagen.flow_from_directory('./imagenet-data/validation',
 		target_size=(224, 224), 
-		batch_size=1,
+		batch_size=10,
 		class_mode='categorical',
 		shuffle=False)
 
     model.trainable=False
     model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy', in_top_k])
 
-    results = model.evaluate_generator(validation_generator, steps=2000, workers=1, max_queue_size=1)
+    results = model.evaluate_generator(validation_generator, steps=5000, workers=1, max_queue_size=1)
 
     print('--> Results:')
     print(model.metrics_names)
