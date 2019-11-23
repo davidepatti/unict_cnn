@@ -3,6 +3,7 @@ import keras
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Dropout, Flatten, Conv2D, MaxPooling2D
 from keras.layers.normalization import BatchNormalization
+from keras.callbacks import ModelCheckpoint
 #from sklearn.model_selection import train_test_split
 import numpy as np
 import pickle
@@ -108,10 +109,13 @@ model.summary()
 
 # (4) Compile 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-
+# checkpoint
+filepath="weights-improvement-{epoch:02d}-{val_acc:.2f}.hdf5"
+checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
+callbacks_list = [checkpoint]
 # (5) Train
 #model.fit(x, y, batch_size=64, epochs=200, verbose=1,  validation_split=0.2, shuffle=True)
-model.fit(x, y, batch_size=40, epochs=100, verbose=1,  validation_split=0.5, shuffle=True)
+model.fit(x, y, batch_size=40, epochs=100, verbose=1, callbacks=callbacks_list, validation_split=0.5, shuffle=True)
 
 model.save_weights('alexnet_100.h5')
 model.load_weights('alexnet_100.h5')

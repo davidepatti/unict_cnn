@@ -124,4 +124,5 @@ print('Test_loss: ', score[0])
 print('Test_accuracy: ', score[1])
 print('Test_accuracy_top: ', score[2])
 
+#model.save_weights(sys.argv[1]+".h5")
 
