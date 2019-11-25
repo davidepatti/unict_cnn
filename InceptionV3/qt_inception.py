@@ -3,6 +3,8 @@ if len(sys.argv) < 3:
     print('Usage: '+sys.argv[0]+' <h5file> <input>')
     exit(0)
 #from keras.applications.inception_v3 import InceptionV3
+from hybrid_inceptionv3 import qt_InceptionV3
+
 from keras.preprocessing import image
 from keras.applications.inception_v3 import preprocess_input
 from keras.applications.inception_v3 import decode_predictions
@@ -16,7 +18,7 @@ weights_path = sys.argv[1]
 
 #model = MobileNet(input_shape=None, alpha=1.0, depth_multiplier=1, dropout=1e-3, include_top=True, weights=weights_path, input_tensor=None, pooling=None, classes=1000)
 
-model = qt_InceptionV3(include_top=True, weights=weights_path, input_tensor=None, input_shape=None, pooling=None, classes=1000)
+model = qt_InceptionV3(weights_path)
 #model = InceptionV3(include_top=True, weights='imagenet', input_tensor=None, input_shape=(299,299,3), pooling=None, classes=1000)
 
 #Alternative custom input shape
