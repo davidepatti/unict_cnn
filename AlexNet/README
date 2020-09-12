@@ -1,0 +1,2 @@
+the "create dataset" script should download 17flowers dataset and split according a seed.
+ONLY works with tf 1.x, or 2.0, since "contrib" has been deprecated.
