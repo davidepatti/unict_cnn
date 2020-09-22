@@ -103,7 +103,7 @@ if __name__ == "__main__":
     model.trainable=False
     model.compile(loss='categorical_crossentropy', optimizer='sgd', metrics=['accuracy', in_top_k])
 
-    results = model.evaluate_generator(validation_generator, steps=5000, workers=1, max_queue_size=1)
+    results = model.evaluate(validation_generator, steps=5000, workers=1, max_queue_size=1)
 
     print('--> Results:')
     print(model.metrics_names)
