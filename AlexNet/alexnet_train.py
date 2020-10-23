@@ -9,6 +9,10 @@ import numpy as np
 import pickle
 import sys
 
+if len(sys.argv)==1:
+    print("please specify seed!")
+    exit(-1)
+
 seed = sys.argv[1]
 np.random.seed(int(seed))
 

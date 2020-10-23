@@ -4,9 +4,13 @@ import numpy as np
 import pickle
 
 import sys
+if len(sys.argv)!=2: 
+    print("missing seed!")
+    exit(-1)
 
 seed = sys.argv[1]
 np.random.seed(int(seed))
+
 
 # (2) Get Data
 import tflearn.datasets.oxflower17 as oxflower17
