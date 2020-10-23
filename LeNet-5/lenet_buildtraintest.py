@@ -107,7 +107,7 @@ steps_per_epoch = X_train.shape[0]//BATCH_SIZE
 validation_steps = X_validation.shape[0]//BATCH_SIZE
 
 tensorboard = TensorBoard(log_dir="logs/{}".format(time()))
-model.fit_generator(train_generator, steps_per_epoch=steps_per_epoch, epochs=EPOCHS, 
+model.fit(train_generator, steps_per_epoch=steps_per_epoch, epochs=EPOCHS, 
                     validation_data=validation_generator, validation_steps=validation_steps, 
                     shuffle=True, callbacks=[tensorboard])
 
