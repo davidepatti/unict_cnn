@@ -2,8 +2,7 @@ import sys
 if len(sys.argv) < 3:
     print('Usage: '+sys.argv[0]+' <h5file> <input>')
     exit(0)
-#from keras.applications.efficientnet import EfficientNetB0
-from tensorflow.python.keras.applications.efficientnet import EfficientNetB0
+from keras.applications.densenet import DenseNet201
 from keras.preprocessing import image
 from keras.applications.densenet import preprocess_input
 from keras.applications.densenet import decode_predictions
@@ -16,9 +15,9 @@ from keras.layers import Input
 weights_path = sys.argv[1]
 
 
-#model = EfficientNetB0(include_top=True, weights='imagenet', input_tensor=None, input_shape=(224,224,3), pooling=None, classes=1000)
-model = EfficientNetB0(include_top=True, weights=weights_path, input_tensor=None, input_shape=None, pooling=None, classes=1000)
-#model = EfficientNetB0(weights=weights_path)
+#model = InceptionV3(include_top=True, weights=weights_path, input_tensor=None, input_shape=None, pooling=None, classes=1000)
+model = DenseNet201(include_top=True, weights='imagenet', input_tensor=None, input_shape=(224,224,3), pooling=None, classes=1000)
+#model = InceptionV3(include_top=True, weights='imagenet', input_tensor=None, input_shape=(299,299,3), pooling=None, classes=1000)
 
 #model.save('inception.h5')
 
