@@ -2,11 +2,10 @@ import sys
 if len(sys.argv) < 3:
     print('Usage: '+sys.argv[0]+' <h5file> <input>')
     exit(0)
-#from keras.applications.efficientnet import EfficientNetB0
 from tensorflow.python.keras.applications.efficientnet import EfficientNetB0
 from keras.preprocessing import image
-from keras.applications.densenet import preprocess_input
-from keras.applications.densenet import decode_predictions
+from tensorflow.python.keras.applications.efficientnet import preprocess_input
+from tensorflow.python.keras.applications.efficientnet import decode_predictions
 from keras.models import Model
 from keras.optimizers import SGD
 import numpy as np
