@@ -17,7 +17,6 @@ weights_path = sys.argv[1]
 
 #model = EfficientNetB0(include_top=True, weights='imagenet', input_tensor=None, input_shape=(224,224,3), pooling=None, classes=1000)
 model = EfficientNetB0(include_top=True, weights=weights_path, input_tensor=None, input_shape=None, pooling=None, classes=1000)
-#model = EfficientNetB0(weights=weights_path)
 
 #model.save('inception.h5')
 
