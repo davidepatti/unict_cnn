@@ -33,6 +33,16 @@ layers = None
 models = None
 keras_utils = None
 
+from keras.layers.fake_approx_convolutional import FakeApproxConv2D
+
+import tensorflow as tf
+# cuDNN can sometimes fail to initialize when TF reserves all of the GPU memory
+physical_devices = tf.config.list_physical_devices('GPU')
+try:
+    tf.config.experimental.set_memory_growth(physical_devices[0], True)
+except:
+    pass
+
 
 def identity_block(input_tensor, kernel_size, filters, stage, block):
     """The identity block is the block that has no conv layer at shortcut.
@@ -56,20 +66,23 @@ def identity_block(input_tensor, kernel_size, filters, stage, block):
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
 
-    x = layers.Conv2D(filters1, (1, 1),
+    #x = layers.FakeApproxConv2D(filters1, (1, 1),
+    x = FakeApproxConv2D(filters1, (1, 1),
                       kernel_initializer='he_normal',
                       name=conv_name_base + '2a')(input_tensor)
     x = layers.BatchNormalization(axis=bn_axis, name=bn_name_base + '2a')(x)
     x = layers.Activation('relu')(x)
 
-    x = layers.Conv2D(filters2, kernel_size,
+    #x = layers.FakeApproxConv2D(filters2, kernel_size,
+    x = FakeApproxConv2D(filters2, kernel_size,
                       padding='same',
                       kernel_initializer='he_normal',
                       name=conv_name_base + '2b')(x)
     x = layers.BatchNormalization(axis=bn_axis, name=bn_name_base + '2b')(x)
     x = layers.Activation('relu')(x)
 
-    x = layers.Conv2D(filters3, (1, 1),
+    #x = layers.FakeApproxConv2D(filters3, (1, 1),
+    x = FakeApproxConv2D(filters3, (1, 1),
                       kernel_initializer='he_normal',
                       name=conv_name_base + '2c')(x)
     x = layers.BatchNormalization(axis=bn_axis, name=bn_name_base + '2c')(x)
@@ -111,24 +124,28 @@ def conv_block(input_tensor,
     conv_name_base = 'res' + str(stage) + block + '_branch'
     bn_name_base = 'bn' + str(stage) + block + '_branch'
 
-    x = layers.Conv2D(filters1, (1, 1), strides=strides,
+    #x = layers.FakeApproxConv2D(filters1, (1, 1), strides=strides,
+    x = FakeApproxConv2D(filters1, (1, 1), strides=strides,
                       kernel_initializer='he_normal',
                       name=conv_name_base + '2a')(input_tensor)
     x = layers.BatchNormalization(axis=bn_axis, name=bn_name_base + '2a')(x)
     x = layers.Activation('relu')(x)
 
-    x = layers.Conv2D(filters2, kernel_size, padding='same',
+    #x = layers.FakeApproxConv2D(filters2, kernel_size, padding='same',
+    x = FakeApproxConv2D(filters2, kernel_size, padding='same',
                       kernel_initializer='he_normal',
                       name=conv_name_base + '2b')(x)
     x = layers.BatchNormalization(axis=bn_axis, name=bn_name_base + '2b')(x)
     x = layers.Activation('relu')(x)
 
-    x = layers.Conv2D(filters3, (1, 1),
+    #x = layers.FakeApproxConv2D(filters3, (1, 1),
+    x = FakeApproxConv2D(filters3, (1, 1),
                       kernel_initializer='he_normal',
                       name=conv_name_base + '2c')(x)
     x = layers.BatchNormalization(axis=bn_axis, name=bn_name_base + '2c')(x)
 
-    shortcut = layers.Conv2D(filters3, (1, 1), strides=strides,
+    #shortcut = layers.FakeApproxConv2D(filters3, (1, 1), strides=strides,
+    shortcut = FakeApproxConv2D(filters3, (1, 1), strides=strides,
                              kernel_initializer='he_normal',
                              name=conv_name_base + '1')(input_tensor)
     shortcut = layers.BatchNormalization(
@@ -223,7 +240,8 @@ def ResNet50(include_top=True,
         bn_axis = 1
 
     x = layers.ZeroPadding2D(padding=(3, 3), name='conv1_pad')(img_input)
-    x = layers.Conv2D(64, (7, 7),
+    #x = layers.FakeApproxConv2D(64, (7, 7),
+    x = FakeApproxConv2D(64, (7, 7),
                       strides=(2, 2),
                       padding='valid',
                       kernel_initializer='he_normal',

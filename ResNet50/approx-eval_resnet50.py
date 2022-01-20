@@ -2,13 +2,14 @@ import sys
 if len(sys.argv) < 3:
     print('Usage: '+sys.argv[0]+' <h5file> <input>')
     print('- just use imagenet as h5 file name to download and use default h5')
-    pring('- use summary as argument to get the network layers description')
+    print('- use summary as argument to get the network layers description')
     exit(0)
 
 sys.path.append(".")
 sys.path.append('../keras-applications')
 
 #DAV
+
 import keras_approx
 from keras_approx.resnet50 import ResNet50
 #from tensorflow.keras.applications.resnet50 import ResNet50
