@@ -51,6 +51,18 @@ layers = None
 models = None
 keras_utils = None
 
+# mod for approx-tx #############################################
+from keras.layers.fake_approx_convolutional import FakeApproxConv2D
+
+import tensorflow as tf
+# cuDNN can sometimes fail to initialize when TF reserves all of the GPU memory
+physical_devices = tf.config.list_physical_devices('GPU')
+try:
+    tf.config.experimental.set_memory_growth(physical_devices[0], True)
+except:
+    pass
+#################################################################
+
 
 def dense_block(x, blocks, name):
     """A dense block.
@@ -83,7 +95,7 @@ def transition_block(x, reduction, name):
     x = layers.BatchNormalization(axis=bn_axis, epsilon=1.001e-5,
                                   name=name + '_bn')(x)
     x = layers.Activation('relu', name=name + '_relu')(x)
-    x = layers.Conv2D(int(backend.int_shape(x)[bn_axis] * reduction), 1,
+    x = FakeApproxConv2D(int(backend.int_shape(x)[bn_axis] * reduction), 1,
                       use_bias=False,
                       name=name + '_conv')(x)
     x = layers.AveragePooling2D(2, strides=2, name=name + '_pool')(x)
@@ -106,13 +118,13 @@ def conv_block(x, growth_rate, name):
                                    epsilon=1.001e-5,
                                    name=name + '_0_bn')(x)
     x1 = layers.Activation('relu', name=name + '_0_relu')(x1)
-    x1 = layers.Conv2D(4 * growth_rate, 1,
+    x1 = FakeApproxConv2D(4 * growth_rate, 1,
                        use_bias=False,
                        name=name + '_1_conv')(x1)
     x1 = layers.BatchNormalization(axis=bn_axis, epsilon=1.001e-5,
                                    name=name + '_1_bn')(x1)
     x1 = layers.Activation('relu', name=name + '_1_relu')(x1)
-    x1 = layers.Conv2D(growth_rate, 3,
+    x1 = FakeApproxConv2D(growth_rate, 3,
                        padding='same',
                        use_bias=False,
                        name=name + '_2_conv')(x1)
@@ -205,7 +217,7 @@ def DenseNet(blocks,
     bn_axis = 3 if backend.image_data_format() == 'channels_last' else 1
 
     x = layers.ZeroPadding2D(padding=((3, 3), (3, 3)))(img_input)
-    x = layers.Conv2D(64, 7, strides=2, use_bias=False, name='conv1/conv')(x)
+    x = FakeApproxConv2D(64, 7, strides=2, use_bias=False, name='conv1/conv')(x)
     x = layers.BatchNormalization(
         axis=bn_axis, epsilon=1.001e-5, name='conv1/bn')(x)
     x = layers.Activation('relu', name='conv1/relu')(x)

@@ -33,6 +33,7 @@ layers = None
 models = None
 keras_utils = None
 
+# mod for approx-tx #############################################
 from keras.layers.fake_approx_convolutional import FakeApproxConv2D
 
 import tensorflow as tf
@@ -42,6 +43,7 @@ try:
     tf.config.experimental.set_memory_growth(physical_devices[0], True)
 except:
     pass
+#################################################################
 
 
 def identity_block(input_tensor, kernel_size, filters, stage, block):
