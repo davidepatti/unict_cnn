@@ -5,11 +5,7 @@ if len(sys.argv) < 3:
     pring('- use summary as argument to get the network layers description')
     exit(0)
 
-sys.path.append(".")
-sys.path.append('../keras-applications')
-
 from tensorflow.keras.applications.resnet50 import ResNet50
-
 
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.resnet50 import preprocess_input
