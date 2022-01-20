@@ -12,17 +12,17 @@ import keras_approx
 from keras_approx.densenet import DenseNet201
 #from keras.applications.densenet import DenseNet201
 
-from keras.preprocessing import image
+from tensorflow.keras.preprocessing import image
 #from keras.applications.densenet import preprocess_input
 #from keras.applications.densenet import decode_predictions
 from keras_approx.densenet import preprocess_input
 from keras_approx.densenet import decode_predictions
 
-from keras.models import Model
-from keras.optimizers import SGD
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import SGD
 import numpy as np
-import cv2
-from keras.layers import Input
+#import cv2
+from tensorflow.keras.layers import Input
 
 weights_path = sys.argv[1]
 
