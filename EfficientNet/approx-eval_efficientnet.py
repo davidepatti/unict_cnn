@@ -1,16 +1,29 @@
 import sys
 if len(sys.argv) < 3:
     print('Usage: '+sys.argv[0]+' <h5file> <input>')
+    print('- just use imagenet as h5 file name to download and use default h5')
+    print('- use summary as argument to get the network layers description')
     exit(0)
-from tensorflow.python.keras.applications.efficientnet import EfficientNetB0
-from keras.preprocessing import image
-from tensorflow.python.keras.applications.efficientnet import preprocess_input
-from tensorflow.python.keras.applications.efficientnet import decode_predictions
-from keras.models import Model
-from keras.optimizers import SGD
+
+sys.path.append(".")
+sys.path.append('../keras-applications')
+
+#from tensorflow.keras.applications.efficientnet import EfficientNetB0
+import keras_approx
+from keras_approx.efficientnet import EfficientNetB0
+
+from tensorflow.keras.preprocessing import image
+
+#from tensorflow.keras.applications.efficientnet import preprocess_input
+#from tensorflow.keras.applications.efficientnet import decode_predictions
+from keras_approx.efficientnet import preprocess_input
+from keras_approx.efficientnet import decode_predictions
+
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import SGD
 import numpy as np
-import cv2
-from keras.layers import Input
+#import cv2
+from tensorflow.keras.layers import Input
 
 weights_path = sys.argv[1]
 
@@ -44,8 +57,8 @@ if __name__ == "__main__":
 
 #########################################
     print('--> Starting evalutation...')
-    from keras.preprocessing.image import ImageDataGenerator
-    from keras import metrics
+    from tensorflow.keras.preprocessing.image import ImageDataGenerator
+    from tensorflow.keras import metrics
     
     def in_top_k(y_true, y_pred):
         return metrics.top_k_categorical_accuracy(y_true,y_pred,k=5)

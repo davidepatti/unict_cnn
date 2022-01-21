@@ -3,10 +3,27 @@ if len(sys.argv) < 3:
     print('Need to pass h5 file and seed')
     exit(0)
 
+
+## mod for approx-tx #############################################
+sys.path.append(".")
+sys.path.append('../keras-applications')
+
+from keras.layers.fake_approx_convolutional import FakeApproxConv2D
+#
+import tensorflow as tf
+## cuDNN can sometimes fail to initialize when TF reserves all of the GPU memory
+physical_devices = tf.config.list_physical_devices('GPU')
+try:
+    tf.config.experimental.set_memory_growth(physical_devices[0], True)
+except:
+    pass
+##################################################################
+
+
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation, Dropout, Flatten, Conv2D, MaxPooling2D
 from tensorflow.keras.layers import BatchNormalization
-from sklearn.model_selection import train_test_split
+#from sklearn.model_selection import train_test_split
 from tensorflow.keras import metrics
 import numpy as np
 np.random.seed(int(sys.argv[2]))
@@ -38,7 +55,7 @@ print('Shape: x_validation={}, y_validation={}'.format(x_validation.shape, y_val
 model = Sequential()
 
 # 1st Convolutional Layer
-model.add(Conv2D(filters=96, input_shape=(224,224,3), kernel_size=(11,11),\
+model.add(FakeApproxConv2D(filters=96, input_shape=(224,224,3), kernel_size=(11,11),\
  strides=(4,4), padding='valid'))
 model.add(Activation('relu'))
 # Pooling 
@@ -47,7 +64,7 @@ model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2), padding='valid'))
 model.add(BatchNormalization())
 
 # 2nd Convolutional Layer
-model.add(Conv2D(filters=256, kernel_size=(11,11), strides=(1,1), padding='valid'))
+model.add(FakeApproxConv2D(filters=256, kernel_size=(11,11), strides=(1,1), padding='valid'))
 model.add(Activation('relu'))
 # Pooling
 model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2), padding='valid'))
@@ -55,19 +72,19 @@ model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2), padding='valid'))
 model.add(BatchNormalization())
 
 # 3rd Convolutional Layer
-model.add(Conv2D(filters=384, kernel_size=(3,3), strides=(1,1), padding='valid'))
+model.add(FakeApproxConv2D(filters=384, kernel_size=(3,3), strides=(1,1), padding='valid'))
 model.add(Activation('relu'))
 # Batch Normalisation
 model.add(BatchNormalization())
 
 # 4th Convolutional Layer
-model.add(Conv2D(filters=384, kernel_size=(3,3), strides=(1,1), padding='valid'))
+model.add(FakeApproxConv2D(filters=384, kernel_size=(3,3), strides=(1,1), padding='valid'))
 model.add(Activation('relu'))
 # Batch Normalisation
 model.add(BatchNormalization())
 
 # 5th Convolutional Layer
-model.add(Conv2D(filters=256, kernel_size=(3,3), strides=(1,1), padding='valid'))
+model.add(FakeApproxConv2D(filters=256, kernel_size=(3,3), strides=(1,1), padding='valid'))
 model.add(Activation('relu'))
 # Pooling
 model.add(MaxPooling2D(pool_size=(2,2), strides=(2,2), padding='valid'))

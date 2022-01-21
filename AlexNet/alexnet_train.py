@@ -1,10 +1,10 @@
 # (1) Importing dependency
 import keras
-from keras.models import Sequential
-from keras.layers import Dense, Activation, Dropout, Flatten, Conv2D, MaxPooling2D
-from keras.layers.normalization import BatchNormalization
-from keras.callbacks import ModelCheckpoint
-#from sklearn.model_selection import train_test_split
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Activation, Dropout, Flatten, Conv2D, MaxPooling2D
+from tensorflow.keras.layers import BatchNormalization
+from tensorflow.keras.callbacks import ModelCheckpoint
+
 import numpy as np
 import os
 import pickle
@@ -20,16 +20,6 @@ np.random.seed(int(seed))
 # (2) Get Data
 import tflearn.datasets.oxflower17 as oxflower17
 x, y = oxflower17.load_data(one_hot=True)
-
-########################################
-#
-# (1) Create Training (80%), test (20%) and validation (20%) dataset
-#     Datasets (x and y) are loaded as numpy object from the previous step
-#x_train, x_test_pre, y_train, y_test_pre = train_test_split(x, y, test_size=0.20, random_state=42)
-#x_test, x_validation, y_test, y_validation = train_test_split(x_test_pre, y_test_pre, test_size=0.1)
-#
-#pickle.dump([x_train, x_test_pre, y_train, y_test_pre],open("train.data","wb"))
-#pickle.dump([x_test, x_validation, y_test, y_validation],open("test.data","wb"))
 
 [x_train, x_test_pre, y_train, y_test_pre]= pickle.load(open("train_"+seed+".data","rb"))
 [x_test, x_validation, y_test, y_validation]= pickle.load(open("test_"+seed+".data","rb"))
