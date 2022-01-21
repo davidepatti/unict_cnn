@@ -36,17 +36,6 @@ layers = None
 models = None
 keras_utils = None
 
-## mod for approx-tx #############################################
-from keras.layers.fake_approx_convolutional import FakeApproxConv2D
-#
-import tensorflow as tf
-## cuDNN can sometimes fail to initialize when TF reserves all of the GPU memory
-physical_devices = tf.config.list_physical_devices('GPU')
-try:
-    tf.config.experimental.set_memory_growth(physical_devices[0], True)
-except:
-    pass
-##################################################################
 
 def conv2d_bn(x,
               filters,
@@ -81,7 +70,7 @@ def conv2d_bn(x,
         bn_axis = 1
     else:
         bn_axis = 3
-    x = FakeApproxConv2D(
+    x = layers.Conv2D(
         filters, (num_row, num_col),
         strides=strides,
         padding=padding,

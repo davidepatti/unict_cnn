@@ -71,17 +71,6 @@ layers = None
 models = None
 keras_utils = None
 
-## mod for approx-tx #############################################
-from keras.layers.fake_approx_convolutional import FakeApproxConv2D
-#
-import tensorflow as tf
-## cuDNN can sometimes fail to initialize when TF reserves all of the GPU memory
-physical_devices = tf.config.list_physical_devices('GPU')
-try:
-    tf.config.experimental.set_memory_growth(physical_devices[0], True)
-except:
-    pass
-##################################################################
 
 def preprocess_input(x, **kwargs):
     """Preprocesses a numpy array encoding a batch of images.
@@ -260,7 +249,7 @@ def MobileNet(input_shape=None,
         x = layers.GlobalAveragePooling2D()(x)
         x = layers.Reshape(shape, name='reshape_1')(x)
         x = layers.Dropout(dropout, name='dropout')(x)
-        x = FakeApproxConv2D(classes, (1, 1),
+        x = layers.Conv2D(classes, (1, 1),
                           padding='same',
                           name='conv_preds')(x)
         x = layers.Reshape((classes,), name='reshape_2')(x)
@@ -363,7 +352,7 @@ def _conv_block(inputs, filters, alpha, kernel=(3, 3), strides=(1, 1)):
     channel_axis = 1 if backend.image_data_format() == 'channels_first' else -1
     filters = int(filters * alpha)
     x = layers.ZeroPadding2D(padding=((0, 1), (0, 1)), name='conv1_pad')(inputs)
-    x = FakeApproxConv2D(filters, kernel,
+    x = layers.Conv2D(filters, kernel,
                       padding='valid',
                       use_bias=False,
                       strides=strides,
@@ -443,7 +432,7 @@ def _depthwise_conv_block(inputs, pointwise_conv_filters, alpha,
         axis=channel_axis, name='conv_dw_%d_bn' % block_id)(x)
     x = layers.ReLU(6., name='conv_dw_%d_relu' % block_id)(x)
 
-    x = FakeApproxConv2D(pointwise_conv_filters, (1, 1),
+    x = layers.Conv2D(pointwise_conv_filters, (1, 1),
                       padding='same',
                       use_bias=False,
                       strides=(1, 1),

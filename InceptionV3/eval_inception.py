@@ -2,15 +2,15 @@ import sys
 if len(sys.argv) < 3:
     print('Usage: '+sys.argv[0]+' <h5file> <input>')
     exit(0)
-from keras.applications.inception_v3 import InceptionV3
-from keras.preprocessing import image
-from keras.applications.inception_v3 import preprocess_input
-from keras.applications.inception_v3 import decode_predictions
-from keras.models import Model
-from keras.optimizers import SGD
+from tensorflow.keras.applications.inception_v3 import InceptionV3
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.inception_v3 import preprocess_input
+from tensorflow.keras.applications.inception_v3 import decode_predictions
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import SGD
 import numpy as np
-import cv2
-from keras.layers import Input
+#import cv2
+from tensorflow.keras.layers import Input
 
 weights_path = sys.argv[1]
 
@@ -45,8 +45,8 @@ if __name__ == "__main__":
 
 #########################################
     print('--> Starting evalutation...')
-    from keras.preprocessing.image import ImageDataGenerator
-    from keras import metrics
+    from tensorflow.keras.preprocessing.image import ImageDataGenerator
+    from tensorflow.keras import metrics
     
     def in_top_k(y_true, y_pred):
         return metrics.top_k_categorical_accuracy(y_true,y_pred,k=5)

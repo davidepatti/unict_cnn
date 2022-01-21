@@ -8,19 +8,30 @@ import numpy as np
 import pandas as pd
 from time import time
 
+import tensorflow
 from sklearn.model_selection import train_test_split
-import tensorflow as tf
-import keras
-import keras.layers as layers
-from keras.models import Sequential
-from keras.preprocessing.image import ImageDataGenerator
-from keras.utils.np_utils import to_categorical
-from keras.callbacks import TensorBoard
-from keras import metrics
+import tensorflow.keras.layers as layers
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.callbacks import TensorBoard
+from tensorflow.keras import metrics
 
 import matplotlib.pyplot as plt
 import seaborn as sns
 sns.set()
+
+## mod for approx-tx #############################################
+from keras.layers.fake_approx_convolutional import FakeApproxConv2D
+#
+import tensorflow as tf
+## cuDNN can sometimes fail to initialize when TF reserves all of the GPU memory
+physical_devices = tf.config.list_physical_devices('GPU')
+try:
+    tf.config.experimental.set_memory_growth(physical_devices[0], True)
+except:
+    pass
+##################################################################
 
 
 h5file=sys.argv[1]
@@ -70,10 +81,10 @@ test['features']       = np.pad(test['features'], ((0,0),(2,2),(2,2),(0,0)), 'co
 print("Updated Image Shape: {}".format(train['features'][0].shape))
 
 # ---------------------------------------------------
-model = keras.Sequential()
-model.add(layers.Conv2D(filters=6, kernel_size=(5, 5), activation='relu', input_shape=(32,32,1)))
+model = tensorflow.keras.Sequential()
+model.add(FakeApproxConv2D(filters=6, kernel_size=(5, 5), activation='relu', input_shape=(32,32,1)))
 model.add(layers.AveragePooling2D())
-model.add(layers.Conv2D(filters=16, kernel_size=(5, 5), activation='relu'))
+model.add(FakeApproxConv2D(filters=16, kernel_size=(5, 5), activation='relu'))
 model.add(layers.AveragePooling2D())
 model.add(layers.Flatten())
 model.add(layers.Dense(units=120, activation='relu'))
@@ -85,7 +96,7 @@ def in_top_k(y_true, y_pred):
     return metrics.top_k_categorical_accuracy(y_true,y_pred,k=5)
 
 # ------------------------------------------
-model.compile(loss=keras.losses.categorical_crossentropy, optimizer=keras.optimizers.Adam(), metrics=['accuracy',in_top_k])
+model.compile(loss=tensorflow.keras.losses.categorical_crossentropy, optimizer=tensorflow.keras.optimizers.Adam(), metrics=['accuracy',in_top_k])
 EPOCHS = 10
 BATCH_SIZE = 128
 
