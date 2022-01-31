@@ -1,2 +1,6 @@
 the "create dataset" script should download 17flowers dataset and split according a seed.
-ONLY works with tf 1.x, or 2.0, since "contrib" has been deprecated.
+
+example:
+python alexnet_create_datasets.py 1000
+python alexnet_train.py 1000
+python eval_alexnet.py alexnet_100.h5 1000

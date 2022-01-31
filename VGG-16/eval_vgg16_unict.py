@@ -4,13 +4,13 @@ if len(sys.argv) < 3:
     print('Usage: '+sys.argv[0]+' <h5file> <input>')
     exit(0)
 
-from keras.models import Sequential
-from keras.layers.core import Flatten, Dense, Dropout
-from keras.layers.convolutional import Conv2D, MaxPooling2D, ZeroPadding2D
-from keras.optimizers import SGD
-from keras.applications.vgg16 import decode_predictions
-from keras.preprocessing import image
-from keras.applications.vgg16 import preprocess_input
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Flatten, Dense, Dropout
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, ZeroPadding2D
+from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.applications.vgg16 import decode_predictions
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.vgg16 import preprocess_input
 import cv2, numpy as np
 
 def VGG_16(weights_path=None):
