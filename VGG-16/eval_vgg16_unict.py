@@ -87,8 +87,8 @@ if __name__ == "__main__":
 
 #########################################
     print('--> Starting evalutation...')
-    from keras.preprocessing.image import ImageDataGenerator
-    from keras import metrics
+    from tensorflow.keras.preprocessing.image import ImageDataGenerator
+    from tensorflow.keras import metrics
     
     def in_top_k(y_true, y_pred):
         return metrics.top_k_categorical_accuracy(y_true,y_pred,k=5)
