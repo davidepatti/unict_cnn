@@ -1,5 +1,11 @@
-
 from __future__ import print_function
+
+import sys
+
+if len(sys.argv) < 2:
+    print('Usage: '+sys.argv[0]+' <h5file>')
+    exit(0)
+
 
 import tensorflow as tf
 #import keras
@@ -26,10 +32,10 @@ class cifar10vgg:
         self.x_shape = [32,32,3]
 
         self.model = self.build_model()
-        if train:
-            self.model = self.train(self.model)
-        else:
-            self.model.load_weights('cifar10vgg.h5')
+        #if train:
+            #self.model = self.train(self.model)
+        #else:
+        self.model.load_weights(sys.argv[1])
 
 
     def build_model(self):
